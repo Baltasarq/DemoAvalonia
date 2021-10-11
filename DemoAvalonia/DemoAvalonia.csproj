@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net5.0</TargetFramework>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="0.10.7" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="0.10.7" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Update="UI\App.axaml.cs">
+        <DependentUpon>App.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\MainWindow.axaml.cs">
+        <DependentUpon>MainWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\AboutWindow.axaml.cs">
+        <DependentUpon>AboutWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\SimplePanelWindow.axaml.cs">
+        <DependentUpon>SimplePanelWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\StackPanelWindow.axaml.cs">
+        <DependentUpon>StackPanelWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\FormWindow.axaml.cs">
+        <DependentUpon>FormWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UI\ChartWindow.axaml.cs">
+        <DependentUpon>ChartWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+</Project>

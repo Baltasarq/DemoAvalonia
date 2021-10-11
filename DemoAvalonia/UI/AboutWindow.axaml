@@ -1,0 +1,19 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Width="300" Height="100"
+        MinWidth="300" MinHeight="100"
+        MaxWidth="400" MaxHeight="200"
+        x:Class="DemoAvalonia.UI.AboutWindow"
+        Title="DemoAvalonia">
+    <StackPanel Margin="5">
+        <TextBlock Name="TxtAbout" Margin="5" />
+        <Button Name="BtOk"
+                Content="Ok"
+                Margin="5"
+                HorizontalContentAlignment="Center"
+                HorizontalAlignment="Stretch" />
+    </StackPanel>
+</Window>

@@ -1,0 +1,58 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Width="300" Height="200"
+        MinWidth="300" MinHeight="200"
+        MaxWidth="400" MaxHeight="300"
+        x:Class="DemoAvalonia.UI.FormWindow"
+        Title="DemoAvalonia">
+    <StackPanel
+        Orientation="Vertical"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        Margin="5">
+        
+        <ComboBox SelectedIndex="0"
+                  Margin="5"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Center">
+            <ComboBoxItem Content="Pasajero" />
+            <ComboBoxItem Content="Acompañante" />
+        </ComboBox>
+        
+        <DockPanel Margin="5">
+            <Label Content="Nombre" DockPanel.Dock="Left" />
+            <TextBox Name="EdName" />
+        </DockPanel>
+        
+        <DockPanel Margin="5">
+            <Label Content="Edad" DockPanel.Dock="Left" />
+            <NumericUpDown Value="18" Minimum="16" Maximum="150"/>
+        </DockPanel>
+        
+        <DockPanel
+            Margin="5"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom">
+            
+            <StackPanel
+                Orientation="Horizontal"
+                DockPanel.Dock="Right"
+                HorizontalAlignment="Right"
+                Margin="5">
+                
+                <Button
+                    Name="BtCancel"
+                    Margin="5"
+                    Content="Cancelar" />
+            
+                <Button
+                    Name="BtOk"
+                    Margin="5"
+                    Content="Ok" />
+            </StackPanel>
+        </DockPanel>
+    </StackPanel>
+</Window>
