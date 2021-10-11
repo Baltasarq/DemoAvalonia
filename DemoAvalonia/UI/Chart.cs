@@ -70,10 +70,6 @@ namespace DemoAvalonia.UI {
         
         void DrawLegends()
         {
-            /*StringFormat verticalDrawFmt = new StringFormat {
-                FormatFlags = StringFormatFlags.DirectionVertical
-            };*/
-            
             this.DrawString(
                     this.LegendFont,
                     (int) this.DataOrgPosition.X,
@@ -104,10 +100,6 @@ namespace DemoAvalonia.UI {
             for(int i = 0; i < numValues; ++i) {
                 string tag = this.values[ i ].ToString();
                 
-               /*int tagWidth = (int) this.grf.MeasureString(
-                                                        tag,
-                                                        this.DataFont ).Width;
-                                                        */
                 var nextPoint = new Point(
                     p.X + xGap, baseLine - this.normalizedData[ i ]
                 );
@@ -119,7 +111,7 @@ namespace DemoAvalonia.UI {
                 this.DrawLine( this.DataPen, p, nextPoint );
                 this.DrawString(
                             this.DataFont,
-                            (int) nextPoint.X /*- tagWidth*/,
+                            (int) nextPoint.X,
                             (int) nextPoint.Y,
                             tag );
                 p = nextPoint;
