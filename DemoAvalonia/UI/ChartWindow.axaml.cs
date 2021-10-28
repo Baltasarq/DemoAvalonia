@@ -1,10 +1,9 @@
 // DemoAvalonia (c) 2021 Baltasar MIT License <jbgarcia@uvigo.es>
 
 
-using Avalonia.Media;
-
 namespace DemoAvalonia.UI {
     using Avalonia;
+    using Avalonia.Media;
     using Avalonia.Controls;
     using Avalonia.Markup.Xaml;
     
@@ -19,10 +18,26 @@ namespace DemoAvalonia.UI {
 #endif
 
             this.Chart = this.FindControl<Chart>( "ChGrf" );
+            var rbBars = this.FindControl<RadioButton>( "RbBars" );
+            var rbLine = this.FindControl<RadioButton>( "RbLine" );
+
+            rbBars.Checked += (_, _) => this.OnChartFormatChanged();
+            rbLine.Checked += (_, _) => this.OnChartFormatChanged();
             
             this.Chart.LegendY = "Sells (in thousands)";
             this.Chart.LegendX = "Months";
             this.Chart.Values = new []{ 10, 20, 30, 40, 25, 21, 11, 2, 28, 33, 18, 45 };
+        }
+
+        void OnChartFormatChanged()
+        {
+            if ( this.Chart.Type == Chart.ChartType.Bars ) {
+                this.Chart.Type = Chart.ChartType.Lines;
+            } else {
+                this.Chart.Type = Chart.ChartType.Bars;
+            }
+            
+            this.Chart.Draw();
         }
         
         public override void Render(DrawingContext context)

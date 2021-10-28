@@ -14,6 +14,12 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
                 
+                <StackPanel
+                        DockPanel.Dock="Bottom">
+                        <RadioButton Content="Bars" Name="RbBars" />
+                        <RadioButton Content="Line" Name="RbLine" IsChecked="true" />
+                </StackPanel>
+                
                 <ui:Chart
                         Name="ChGrf"
                         HorizontalAlignment="Stretch"
