@@ -15,7 +15,8 @@
                 VerticalAlignment="Stretch">
                 
                 <StackPanel
-                        DockPanel.Dock="Bottom">
+                        Orientation="Horizontal"
+                        DockPanel.Dock="Top">
                         <RadioButton Content="Bars" Name="RbBars" />
                         <RadioButton Content="Line" Name="RbLine" IsChecked="true" />
                 </StackPanel>
