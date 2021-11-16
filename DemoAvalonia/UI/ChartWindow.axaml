@@ -17,8 +17,8 @@
                 <StackPanel
                         Orientation="Horizontal"
                         DockPanel.Dock="Top">
-                        <RadioButton Content="Bars" Name="RbBars" />
-                        <RadioButton Content="Line" Name="RbLine" IsChecked="true" />
+                        <RadioButton Margin="5" Content="Bars" Name="RbBars" />
+                        <RadioButton Margin="5" Content="Line" Name="RbLine" IsChecked="true" />
                 </StackPanel>
                 
                 <ui:Chart
