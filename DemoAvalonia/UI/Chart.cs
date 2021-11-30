@@ -1,8 +1,6 @@
 // DemoAvalonia (c) 2021 Baltasar MIT License <jbgarcia@uvigo.es>
 
 
-using Avalonia.Layout;
-
 namespace DemoAvalonia.UI {
     using System;
     using System.Linq;
@@ -10,6 +8,7 @@ namespace DemoAvalonia.UI {
 
     using Avalonia;
     using Avalonia.Media;
+    using Avalonia.Layout;
     using Avalonia.Controls;
     using Avalonia.Controls.Shapes;
     
@@ -36,16 +35,27 @@ namespace DemoAvalonia.UI {
         public Chart()
         {
             this.values = new List<int>();
-            this.LegendX = "";
-            this.LegendY = "";
+            this.labels = new List<string>();
+            this.LegendX = "Value";
+            this.LegendY = "Date";
             this.normalizedData = Array.Empty<int>();
             this.FrameWidth = 50;
             this.Type = ChartType.Lines;
-            this.AxisPen = new Pen( Brushes.Black, 10 );
-            this.DataPen = new Pen( Brushes.Red, 4 );
+            this.AxisPen = new Pen( Brushes.Black, 4 );
+            this.DataPen = new Pen( Brushes.Red, 2 );
             this.DataFont = new Font( 12 ) { Family = FontFamily.Default };
+            this.LabelFont = new Font( 12 ) { Family = FontFamily.Default };
             this.LegendFont = new Font( 12 ) { Family = FontFamily.Default };
             this.Background = Brushes.White;
+            this.DrawGrid = true;
+            this.GridPen = new Pen( Brushes.Gray );
+        }
+        
+        public override void Render(DrawingContext context)
+        {
+            base.Render( context );
+
+            this.Draw();
         }
         
         /// <summary>
@@ -59,8 +69,8 @@ namespace DemoAvalonia.UI {
             this.DrawRectangle(
                 new Pen( this.Background, this.FrameWidth ),
                 0, 0,
-                (int) this.Width,
-                (int) this.Height );
+                this.Width,
+                this.Height );
             
             // Chart components
             this.DrawAxis();
@@ -73,7 +83,7 @@ namespace DemoAvalonia.UI {
             this.DrawString(
                     this.LegendFont,
                     (int) this.DataOrgPosition.X,
-                    (int) ( this.FramedEndPosition.Y + 5 ),
+                    (int) ( this.FramedEndPosition.Y + 20 ),
                     this.LegendX,
                     vertical: false,
                     horizontalAlignment: HorizontalAlignment.Center,
@@ -91,60 +101,119 @@ namespace DemoAvalonia.UI {
         
         void DrawData()
         {
-            int numValues = this.values.Count;
-            var p = this.DataOrgPosition;
-            int xGap = this.GraphWidth / ( numValues + 1 );
-            int baseLine = (int) this.DataOrgPosition.Y;
-
             this.NormalizeData();
+
+            int numValues = this.normalizedData.Length;
+            int baseLine = (int) this.DataOrgPosition.Y;
+            int xGap = (int) ( (double) this.GraphWidth / ( numValues + 1 ) );
+            
+            // Start drawing point
+            var currentPoint = new Point(
+                            x: this.DataOrgPosition.X + xGap,
+                            y: baseLine - this.normalizedData[ 0 ] );
+
+            // Next points
             for(int i = 0; i < numValues; ++i) {
                 string tag = this.values[ i ].ToString();
                 
                 var nextPoint = new Point(
-                    p.X + xGap, baseLine - this.normalizedData[ i ]
+                    x: this.DataOrgPosition.X + ( xGap * ( i + 1 ) ),
+                    y: baseLine - this.normalizedData[ i ]
                 );
-                
+
                 if ( this.Type == ChartType.Bars ) {
-                    p = new Point( nextPoint.X, baseLine );
+                    currentPoint = new Point( nextPoint.X, baseLine );
                 }
                 
-                this.DrawLine( this.DataPen, p, nextPoint );
+                this.DrawLine( this.DataPen, currentPoint, nextPoint );
                 this.DrawString(
-                            this.DataFont,
-                            (int) nextPoint.X,
-                            (int) nextPoint.Y,
-                            tag );
-                p = nextPoint;
+                            font: this.DataFont,
+                            x: (int) ( nextPoint.X - ( this.DataPen.Thickness / 2 ) ),
+                            y: (int) ( nextPoint.Y - this.DataPen.Thickness ),
+                            msg: tag );
+                
+                currentPoint = nextPoint;
             }
         }
         
         void DrawAxis()
         {
+            // Grid
+            if ( this.DrawGrid ) {
+                int numValues = this.values.Count;
+                int xGap = (int) ( (double) this.GraphWidth / ( numValues + 1 ) );
+                int yGap = this.GraphHeight / 10;
+                
+                // Labels available?
+                if ( this.labels.Count == 0 ) {
+                    this.labels.AddRange( 
+                        Enumerable.Range( 1, this.values.Count )
+                            .Select( x => Convert.ToString( x ) ) );
+                }
+                
+                // Vertical lines going right
+                for (int i = 0; i < ( numValues + 1 ); ++i) {
+                    int columnPos = (int) this.DataOrgPosition.X + ( xGap * i );
+
+                    // Y axis (1 per value)
+                    this.DrawLine(
+                        pen: this.GridPen,
+                        x1: columnPos,
+                        y1: (int) this.DataOrgPosition.Y,
+                        x2: columnPos,
+                        y2: (int) this.FramedOrgPosition.Y );
+                    
+                    // The label
+                    if ( ( i - 1 ) >= 0
+                      && ( i - 1 ) < this.labels.Count )
+                    {
+                        this.DrawString(
+                            font: this.LabelFont,
+                            x: columnPos,
+                            y: (int) ( this.FramedEndPosition.Y + 2 ),
+                            msg: this.labels[ i - 1 ]
+                        );
+                    }
+                }
+
+                // Horizontal lines going up
+                for (int i = 0; i < 10; ++i) {
+                    int rowPos = (int) this.DataOrgPosition.Y - ( yGap * i );
+                    
+                    // X axis (tenth line)
+                    this.DrawLine(
+                        this.GridPen,
+                        (int) this.DataOrgPosition.X,
+                        rowPos,
+                        (int) this.FramedEndPosition.X,
+                        rowPos );
+                }
+            }
+            
             // Y axis
             this.DrawLine( this.AxisPen,
-                               (int) this.FramedOrgPosition.X,
-                               (int) this.FramedOrgPosition.Y,
-                               (int) this.FramedOrgPosition.X,
-                               (int) this.FramedEndPosition.Y );
-                                        
+                           (int) this.FramedOrgPosition.X,
+                           (int) this.FramedOrgPosition.Y,
+                           (int) this.FramedOrgPosition.X,
+                           (int) this.FramedEndPosition.Y );
+                                     
             // X axis
             this.DrawLine( this.AxisPen,
-                               (int) this.FramedOrgPosition.X,
-                               (int) this.FramedEndPosition.Y,
-                               (int) this.FramedEndPosition.X,
-                               (int) this.FramedEndPosition.Y );
+                           (int) this.FramedOrgPosition.X,
+                           (int) this.FramedEndPosition.Y,
+                           (int) this.FramedEndPosition.X,
+                           (int) this.FramedEndPosition.Y );
         }
         
         void NormalizeData()
         {
-            int maxHeight = (int) this.DataOrgPosition.Y - this.FrameWidth;
+            int numValues = this.values.Count;
             int maxValue = this.values.Max();
-
             this.normalizedData = this.values.ToArray();
 
-            for(int i = 0; i < this.normalizedData.Length; ++i) {
+            for(int i = 0; i < numValues; ++i) {
                 this.normalizedData[ i ] =
-                                    ( this.values[ i ] * maxHeight ) / maxValue;
+                                    ( this.values[ i ] * this.GraphHeight ) / maxValue;
             }
             
             return;
@@ -155,12 +224,25 @@ namespace DemoAvalonia.UI {
         /// </summary>
         /// <value>The values.</value>
         public IEnumerable<int> Values {
-            get {
-                return this.values.ToArray();
-            }
+            get => this.values.ToArray();
+
             set {
                 this.values.Clear();
                 this.values.AddRange( value );
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the labels used for the data
+        /// under the X axis.
+        /// </summary>
+        /// <value>The labels.</value>
+        public IEnumerable<string> Labels {
+            get => this.labels.ToArray();
+
+            set {
+                this.labels.Clear();
+                this.labels.AddRange( value );
             }
         }
         
@@ -190,31 +272,27 @@ namespace DemoAvalonia.UI {
         /// Gets the framed origin.
         /// </summary>
         /// <value>The origin <see cref="Point"/>.</value>
-        public Point FramedOrgPosition {
-            get {
-                return new Point( this.FrameWidth, this.FrameWidth );
-            }
-        }
+        public Point FramedOrgPosition => new ( this.FrameWidth, this.FrameWidth );
         
         /// <summary>
         /// Gets the framed end.
         /// </summary>
         /// <value>The end <see cref="Point"/>.</value>
-        public Point FramedEndPosition {
-            get {
-                return new Point( this.Width - this.FrameWidth,
-                                  this.Height - this.FrameWidth );
-            }
-        }
+        public Point FramedEndPosition => new ( this.Width - this.FrameWidth,
+                                                this.Height - this.FrameWidth );
         
         /// <summary>
         /// Gets the width of the graph.
         /// </summary>
         /// <value>The width of the graph.</value>
-        public int GraphWidth {
-            get => (int) this.Width - ( this.FrameWidth * 2 );
-        }
+        public int GraphWidth => this.Width - ( this.FrameWidth * 2 );
         
+        /// <summary>
+        /// Gets the height of the graph.
+        /// </summary>
+        /// <value>The height of the graph.</value>
+        public int GraphHeight => this.Height - ( this.FrameWidth * 2 );
+
         /// <summary>
         /// Gets or sets the pen used to draw the axis.
         /// </summary>
@@ -232,10 +310,26 @@ namespace DemoAvalonia.UI {
         }
         
         /// <summary>
-        /// Gets or sets the data font.
+        /// Gets or sets the pen used to draw the grid.
+        /// </summary>
+        /// <value>The grid <see cref="Pen"/>.</value>
+        public Pen GridPen {
+            get; set;
+        }
+        
+        /// <summary>
+        /// Gets or sets the font for data.
         /// </summary>
         /// <value>The data <see cref="Font"/>.</value>
         public Font DataFont {
+            get; set;
+        }
+        
+        /// <summary>
+        /// Gets or sets the font for labels.
+        /// </summary>
+        /// <value>The label <see cref="Font"/>.</value>
+        public Font LabelFont {
             get; set;
         }
         
@@ -260,6 +354,11 @@ namespace DemoAvalonia.UI {
         /// </summary>
         /// <value>The <see cref="Font"/> for legends.</value>
         public Font LegendFont {
+            get; set;
+        }
+
+        /// <summary>Get or sets whether to show a grid or not.</summary>
+        public bool DrawGrid {
             get; set;
         }
         
@@ -335,6 +434,8 @@ namespace DemoAvalonia.UI {
 
         void ClearCanvas()
         {
+            this.Children.Clear();
+            
             var rect = new Rectangle {
                 Width = this.Width, Height = this.Height,
                 Stroke = this.Background,
@@ -347,7 +448,8 @@ namespace DemoAvalonia.UI {
             this.Children.Add( rect );
         }
         
-        List<int> values;
+        readonly List<int> values;
+        readonly List<string> labels;
         int[] normalizedData;
     }
 }
