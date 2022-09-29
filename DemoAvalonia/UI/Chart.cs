@@ -12,11 +12,12 @@ namespace DemoAvalonia.UI {
     using Avalonia.Controls;
     using Avalonia.Controls.Shapes;
     
-    
+    /// <summary>Support for charts</summary>
     public class Chart: Canvas {
+        /// <summary>Select the type of chart.</summary>
         public enum ChartType { Lines, Bars }
 
-
+        /// <summary>Support for fonts</summary>
         public struct Font {
             public Font(double fontSize)
             {
@@ -32,6 +33,7 @@ namespace DemoAvalonia.UI {
             public double Size { get; set; }
         }
 
+        /// <summary>Parameterless constructor. Change the properties.</summary>
         public Chart()
         {
             this.values = new List<int>();
