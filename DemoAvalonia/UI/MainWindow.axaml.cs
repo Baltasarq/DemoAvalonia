@@ -21,10 +21,12 @@ namespace DemoAvalonia.UI {
             var opStackPanel = this.FindControl<MenuItem>( "OpStackPanel" );
             var opForm = this.FindControl<MenuItem>( "OpForm" );
             var opChart = this.FindControl<MenuItem>( "OpChart" );
+            var opMessageBox = this.FindControl<MenuItem>( "OpMessageBox" );
             var btFirst = this.FindControl<Button>( "BtFirst" );
             var btSecond = this.FindControl<Button>( "BtSecond" );
             var btThird = this.FindControl<Button>( "BtThird" );
             var btFourth = this.FindControl<Button>( "BtFourth" );
+            var btFifth = this.FindControl<Button>( "BtFifth" );
             
             opExit.Click += (_, _) => this.OnExit();
             opAbout.Click += (_, _) => this.OnAbout();
@@ -40,6 +42,9 @@ namespace DemoAvalonia.UI {
 
             opChart.Click += (_, _) => this.OnViewChart();
             btFourth.Click += (_, _) => this.OnViewChart();
+            
+            opMessageBox.Click += (_, _) => this.OnViewMessageBox();
+            btFifth.Click += (_, _) => this.OnViewMessageBox();
         }
 
         private void InitializeComponent()
@@ -75,6 +80,17 @@ namespace DemoAvalonia.UI {
         public void OnViewChart()
         {
             new ChartWindow().Show();
+        }
+
+        public void OnViewMessageBox()
+        {
+            var dlg = new MessageBox {
+                Message = "This is a dialog in Avalonia, this is a dialog in Avalonia"
+                    + "this is a dialog in Avalonia, "
+                    + "this is a dialog in Avalonia."
+            };
+                
+            dlg.ShowDialog( this );
         }
     }
 }

@@ -18,6 +18,7 @@
                 <MenuItem Header="S_tack panel" Name="OpStackPanel" />
                 <MenuItem Header="_Form" Name="OpForm" />
                 <MenuItem Header="Demo _gráficas" Name="OpChart" />
+                <MenuItem Header="_Message box" Name="OpMessageBox" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Name="OpAbout" />
@@ -44,6 +45,12 @@
             
             <Button Name="BtFourth"
                     Content="Fourth"
+                    Margin="5"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center" />
+            
+            <Button Name="BtFifth"
+                    Content="Fifth"
                     Margin="5"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center" />
