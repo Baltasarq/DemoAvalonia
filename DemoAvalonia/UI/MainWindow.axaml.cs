@@ -1,7 +1,10 @@
 // DemoAvalonia (c) 2021 Baltasar MIT License <jbgarcia@uvigo.es>
 
 
+using System.Threading.Tasks;
+
 namespace DemoAvalonia.UI {
+    using System;
     using Avalonia;
     using Avalonia.Controls;
     using Avalonia.Markup.Xaml;
@@ -27,24 +30,48 @@ namespace DemoAvalonia.UI {
             var btThird = this.FindControl<Button>( "BtThird" );
             var btFourth = this.FindControl<Button>( "BtFourth" );
             var btFifth = this.FindControl<Button>( "BtFifth" );
+            var cbOptions = this.FindControl<ComboBox>( "CbOptions" );
             
             opExit.Click += (_, _) => this.OnExit();
             opAbout.Click += (_, _) => this.OnAbout();
-            
-            opSimplePanel.Click += (_, _) => this.OnViewSimplePanel();
-            btFirst.Click += (_, _) => this.OnViewSimplePanel();
-            
-            opStackPanel.Click += (_, _) => this.OnViewStackPanel();
-            btSecond.Click += (_, _) => this.OnViewStackPanel();
-            
-            opForm.Click += (_, _) => this.OnViewForm();
-            btThird.Click += (_, _) => this.OnViewForm();
 
-            opChart.Click += (_, _) => this.OnViewChart();
-            btFourth.Click += (_, _) => this.OnViewChart();
+            var actions = new Action[] {
+                this.OnViewSimplePanel,
+                this.OnViewStackPanel,
+                this.OnViewForm,
+                this.OnViewChart,
+                this.OnViewMessageBox
+            };
             
-            opMessageBox.Click += (_, _) => this.OnViewMessageBox();
-            btFifth.Click += (_, _) => this.OnViewMessageBox();
+            opSimplePanel.Click += (_, _) => actions[ 0 ]();
+            btFirst.Click += (_, _) => actions[ 0 ]();
+            
+            opStackPanel.Click += (_, _) => actions[ 1 ]();
+            btSecond.Click += (_, _) => actions[ 1 ]();
+            
+            opForm.Click += (_, _) => actions[ 2 ]();
+            btThird.Click += (_, _) => actions[ 2 ]();
+
+            opChart.Click += (_, _) => actions[ 3 ]();
+            btFourth.Click += (_, _) => actions[ 3 ]();
+            
+            opMessageBox.Click += (_, _) => actions[ 4 ]();
+            btFifth.Click += (_, _) => actions[ 4 ]();
+            
+            // Load combobox (can be done in the YAML as well)
+            cbOptions.Items = new [] {
+                "Simple panel",
+                "Stack panel",
+                "Form",
+                "Graph",
+                "Message box"
+            };
+            cbOptions.SelectedIndex = 0;            
+            cbOptions.SelectionChanged += (_, _) => {
+                if ( cbOptions.SelectedIndex >= 0 ) {
+                    actions[cbOptions.SelectedIndex]();
+                }
+            };
         }
 
         private void InitializeComponent()
@@ -72,9 +99,21 @@ namespace DemoAvalonia.UI {
             new StackPanelWindow().Show();
         }
 
-        public void OnViewForm()
+        public async void OnViewForm()
         {
-            new FormWindow().ShowDialog( this );
+            var form = new FormWindow();
+            
+            await form.ShowDialog( this );
+            
+            var dlg = new MessageBox {
+                Message = $"Kind: {form.Kind}, "
+                            + $" Start: {form.Start}, "
+                            + $" End: {form.End}, "
+                            + $" Num Children: {form.NumChildren}"
+                            + $" Accepted: {form.Accept}"
+            };
+                
+            await dlg.ShowDialog( this );
         }
 
         public void OnViewChart()
@@ -85,7 +124,7 @@ namespace DemoAvalonia.UI {
         public void OnViewMessageBox()
         {
             var dlg = new MessageBox {
-                Message = "This is a dialog in Avalonia, this is a dialog in Avalonia"
+                Message = "This is a dialog in Avalonia, this is a dialog in Avalonia, "
                     + "this is a dialog in Avalonia, "
                     + "this is a dialog in Avalonia."
             };

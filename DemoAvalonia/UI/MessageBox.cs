@@ -9,16 +9,16 @@ public class MessageBox: Window
 {
     public MessageBox()
     {
+        this.lblMessage = new Label {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Margin = new Thickness( 5 )
+        };
         this.Build();
     }
     
     void Build()
     {
         var pnlMain = new DockPanel {
-            Margin = new Thickness( 5 )
-        };
-        this.lblMessage = new Label {
-            HorizontalAlignment = HorizontalAlignment.Left,
             Margin = new Thickness( 5 )
         };
         var btOk = new Button {

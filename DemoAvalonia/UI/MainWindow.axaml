@@ -54,6 +54,11 @@
                     Margin="5"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center" />
+            
+            <ComboBox Name="CbOptions"
+                      Margin="5"
+                      HorizontalAlignment="Stretch"
+                      HorizontalContentAlignment="Center" />
         </StackPanel>
     </DockPanel>
 </Window>

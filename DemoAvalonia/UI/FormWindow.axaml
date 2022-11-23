@@ -3,9 +3,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Width="300" Height="200"
-        MinWidth="300" MinHeight="200"
-        MaxWidth="400" MaxHeight="300"
+        Width="375" Height="275"
+        MinWidth="375" MinHeight="275"
+        MaxWidth="450" MaxHeight="350"
         x:Class="DemoAvalonia.UI.FormWindow"
         Title="DemoAvalonia">
     <StackPanel
@@ -14,22 +14,37 @@
         VerticalAlignment="Stretch"
         Margin="5">
         
-        <ComboBox SelectedIndex="0"
-                  Margin="5"
-                  HorizontalAlignment="Stretch"
-                  HorizontalContentAlignment="Center">
-            <ComboBoxItem Content="Pasajero" />
-            <ComboBoxItem Content="Acompañante" />
-        </ComboBox>
-        
         <DockPanel Margin="5">
-            <Label Content="Nombre" DockPanel.Dock="Left" />
-            <TextBox Name="EdName" />
+            <Label Content="Kind" DockPanel.Dock="Left" />
+            <ComboBox Name="CbKind"
+                      SelectedIndex="0"
+                      Margin="5"
+                      HorizontalAlignment="Stretch"
+                      HorizontalContentAlignment="Center">
+                <ComboBoxItem>Average traveller</ComboBoxItem>
+                <ComboBoxItem>Frequent traveller</ComboBoxItem>
+            </ComboBox>
         </DockPanel>
         
         <DockPanel Margin="5">
-            <Label Content="Edad" DockPanel.Dock="Left" />
-            <NumericUpDown Value="18" Minimum="16" Maximum="150"/>
+            <Label Content="Start" DockPanel.Dock="Left" />
+            <ComboBox Name="CbStart"
+                      Margin="5"
+                      HorizontalAlignment="Stretch"
+                      HorizontalContentAlignment="Center" />
+        </DockPanel>
+        
+        <DockPanel Margin="5">
+            <Label Content="End" DockPanel.Dock="Left" />
+            <ComboBox Name="CbEnd"
+                      Margin="5"
+                      HorizontalAlignment="Stretch"
+                      HorizontalContentAlignment="Center" />
+        </DockPanel>
+        
+        <DockPanel Margin="5">
+            <Label Content="Children (less than three years old)" DockPanel.Dock="Left" />
+            <NumericUpDown Margin="5" Name="EdNumChildren" Value="0" Minimum="0" Maximum="10"/>
         </DockPanel>
         
         <DockPanel
