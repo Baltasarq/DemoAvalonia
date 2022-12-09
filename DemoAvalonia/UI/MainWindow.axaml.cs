@@ -1,15 +1,23 @@
 // DemoAvalonia (c) 2021 Baltasar MIT License <jbgarcia@uvigo.es>
 
 
-using System.Threading.Tasks;
-
 namespace DemoAvalonia.UI {
     using System;
+    using System.Collections.Generic;
+
     using Avalonia;
     using Avalonia.Controls;
     using Avalonia.Markup.Xaml;
 
 
+    class Node {
+        public required string Title { init; get; }
+        public required Action Action { init; get; }
+
+        public override string ToString() => this.Title;
+    }
+
+    
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -18,6 +26,7 @@ namespace DemoAvalonia.UI {
 #if DEBUG
             this.AttachDevTools();
 #endif
+            var tvOptions = this.FindControl<TreeView>( "tvOptions" );
             var opExit = this.FindControl<MenuItem>( "OpExit" );
             var opAbout = this.FindControl<MenuItem>( "OpAbout" );
             var opSimplePanel = this.FindControl<MenuItem>( "OpSimplePanel" );
@@ -35,6 +44,15 @@ namespace DemoAvalonia.UI {
             opExit.Click += (_, _) => this.OnExit();
             opAbout.Click += (_, _) => this.OnAbout();
 
+            // Actions
+            var actionTitles = new [] {
+                "Simple panel",
+                "Stack panel",
+                "Form",
+                "Graph",
+                "Message box"
+            };
+            
             var actions = new Action[] {
                 this.OnViewSimplePanel,
                 this.OnViewStackPanel,
@@ -59,18 +77,28 @@ namespace DemoAvalonia.UI {
             btFifth.Click += (_, _) => actions[ 4 ]();
             
             // Load combobox (can be done in the YAML as well)
-            cbOptions.Items = new [] {
-                "Simple panel",
-                "Stack panel",
-                "Form",
-                "Graph",
-                "Message box"
-            };
+            cbOptions.Items = actionTitles;
             cbOptions.SelectedIndex = 0;            
             cbOptions.SelectionChanged += (_, _) => {
                 if ( cbOptions.SelectedIndex >= 0 ) {
-                    actions[cbOptions.SelectedIndex]();
+                    actions[ cbOptions.SelectedIndex ]();
                 }
+            };
+            
+            // Prepare treeview
+            var listNodes = new [] {
+                new Node{ Title = actionTitles[ 0 ], Action = actions[ 0 ] },
+                new Node{ Title = actionTitles[ 1 ], Action = actions[ 1 ] },
+                new Node{ Title = actionTitles[ 2 ], Action = actions[ 2 ] },
+                new Node{ Title = actionTitles[ 3 ], Action = actions[ 3 ] },
+                new Node{ Title = actionTitles[ 4 ], Action = actions[ 4 ] }
+            };
+
+            tvOptions.Items = listNodes;
+            tvOptions.SelectedItem = listNodes[ 0 ];
+            tvOptions.SelectionChanged += (_, _) => {
+                var node = (Node) tvOptions.SelectedItem;
+                node?.Action();
             };
         }
 

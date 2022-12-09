@@ -17,13 +17,16 @@
                 <MenuItem Header="_Simple panel" Name="OpSimplePanel" />
                 <MenuItem Header="S_tack panel" Name="OpStackPanel" />
                 <MenuItem Header="_Form" Name="OpForm" />
-                <MenuItem Header="Demo _gráficas" Name="OpChart" />
+                <MenuItem Header="_Graph" Name="OpChart" />
                 <MenuItem Header="_Message box" Name="OpMessageBox" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Name="OpAbout" />
             </MenuItem>
         </Menu>
+        <DockPanel DockPanel.Dock="Left">
+            <TreeView Name="tvOptions" />
+        </DockPanel>
         <StackPanel Margin="5">
             <Button Name="BtFirst"
                     Content="First"
