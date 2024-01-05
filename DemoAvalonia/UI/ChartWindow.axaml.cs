@@ -1,6 +1,7 @@
-// DemoAvalonia (c) 2021 Baltasar MIT License <jbgarcia@uvigo.es>
+// DemoAvalonia (c) 2021/23 Baltasar MIT License <jbgarcia@uvigo.es>
 
 
+using System;
 using Avalonia.Media;
 
 namespace DemoAvalonia.UI {
@@ -18,16 +19,17 @@ namespace DemoAvalonia.UI {
             this.AttachDevTools();
 #endif
 
-            this.Chart = this.FindControl<Chart>( "ChGrf" );
-            var rbBars = this.FindControl<RadioButton>( "RbBars" );
-            var rbLine = this.FindControl<RadioButton>( "RbLine" );
-            var edThickness = this.FindControl<NumericUpDown>( "EdThickness" );
-            var cbBold = this.FindControl<CheckBox>( "CbBold" );
-            var cbItalic = this.FindControl<CheckBox>( "CbItalic" );
+            this.Chart = this.GetControl<Chart>( "ChGrf" );
+            var rbBars = this.GetControl<RadioButton>( "RbBars" );
+            var rbLine = this.GetControl<RadioButton>( "RbLine" );
+            var edThickness = this.GetControl<NumericUpDown>( "EdThickness" );
+            var cbBold = this.GetControl<CheckBox>( "CbBold" );
+            var cbItalic = this.GetControl<CheckBox>( "CbItalic" );
             
-            rbBars.Checked += (_, _) => this.OnChartFormatChanged();
-            rbLine.Checked += (_, _) => this.OnChartFormatChanged();
-            edThickness.ValueChanged += (_, evt) => this.OnChartThicknessChanged( evt.NewValue );
+            rbBars.IsCheckedChanged += (_, _) => this.OnChartFormatChanged();
+            rbLine.IsCheckedChanged += (_, _) => this.OnChartFormatChanged();
+            edThickness.ValueChanged += (_, evt) =>
+                this.OnChartThicknessChanged( ( (double?) evt.NewValue ) ?? 1.0 );
             cbBold.Click += (_, _) => this.OnFontsStyleChanged();
             cbItalic.Click += (_, _) => this.OnFontsStyleChanged();
             
@@ -39,14 +41,28 @@ namespace DemoAvalonia.UI {
 
         void OnChartFormatChanged()
         {
-            var edThickness = this.FindControl<NumericUpDown>( "EdThickness" );
+            var rbBars = this.GetControl<RadioButton>( "RbBars" );
+            var rbLine = this.GetControl<RadioButton>( "RbLine" );
+            var edThickness = this.GetControl<NumericUpDown>( "EdThickness" );
+
+            if ( rbBars.IsChecked.HasValue
+             && rbBars.IsChecked.Value )
+            {
+                this._chartType = Chart.ChartType.Bars;
+            }
+            else
+            if ( rbLine.IsChecked.HasValue
+              && rbLine.IsChecked.Value )
+            {
+                this._chartType = Chart.ChartType.Lines;
+            }
             
-            if ( this.Chart.Type == Chart.ChartType.Bars ) {
+            if ( this._chartType == Chart.ChartType.Lines ) {
                 this.Chart.Type = Chart.ChartType.Lines;
-                this.Chart.DataPen = new Pen( Brushes.Red, 2 * edThickness.Value );
+                this.Chart.DataPen = new Pen( Brushes.Red, 2 * ( ( (double?) edThickness.Value ) ?? 1 ) );
             } else {
                 this.Chart.Type = Chart.ChartType.Bars;
-                this.Chart.DataPen = new Pen( Brushes.Navy, 20 * edThickness.Value );
+                this.Chart.DataPen = new Pen( Brushes.Navy, 20 * ( ( (double?) edThickness.Value ?? 1 ) ) );
             }
             
             this.Chart.Draw();
@@ -66,8 +82,8 @@ namespace DemoAvalonia.UI {
 
         void OnFontsStyleChanged()
         {
-            var cbBold = this.FindControl<CheckBox>( "CbBold" );
-            var cbItalic = this.FindControl<CheckBox>( "CbItalic" );
+            var cbBold = this.GetControl<CheckBox>( "CbBold" );
+            var cbItalic = this.GetControl<CheckBox>( "CbItalic" );
             bool italic = cbItalic.IsChecked ?? false;
             bool bold = cbBold.IsChecked ?? false;
             FontStyle style = italic ? FontStyle.Italic : FontStyle.Normal;
@@ -99,6 +115,7 @@ namespace DemoAvalonia.UI {
             AvaloniaXamlLoader.Load(this);
         }
         
-        Chart Chart { get; }
+        private Chart Chart { get; }
+        private Chart.ChartType _chartType;
     }
 }

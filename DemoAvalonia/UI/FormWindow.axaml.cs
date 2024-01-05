@@ -1,4 +1,4 @@
-// DemoAvalonia (c) 2021 Baltasar MIT License <jbgarcia@uvigo.es>
+// DemoAvalonia (c) 2021/23 Baltasar MIT License <jbgarcia@uvigo.es>
 
 
 
@@ -18,22 +18,22 @@ namespace DemoAvalonia.UI {
 #if DEBUG
             this.AttachDevTools();
 #endif
-            this.stations = new ObservableCollection<Station>( new Station[] {
+            this._stations = new ObservableCollection<Station>( new Station[] {
                 new (){ City = "Madrid", Name = "Chamartín" },
                 new (){ City = "Madrid", Name = "Atocha" },
                 new (){ City = "Ourense", Name = "Empalme" },
                 new (){ City = "Ourense", Name = "San Francisco" },
             });
 
-            var cbStart = this.FindControl<ComboBox>( "CbStart" );
-            var cbEnd = this.FindControl<ComboBox>( "CbEnd" );
-            var btOk = this.FindControl<Button>( "BtOk" );
-            var btCancel = this.FindControl<Button>( "BtCancel" );
+            var cbStart = this.GetControl<ComboBox>( "CbStart" );
+            var cbEnd = this.GetControl<ComboBox>( "CbEnd" );
+            var btOk = this.GetControl<Button>( "BtOk" );
+            var btCancel = this.GetControl<Button>( "BtCancel" );
 
             // Modifications in the 'stations' list will be shown in the combos
-            cbStart.Items = this.stations;
+            cbStart.ItemsSource = this._stations;
             cbStart.SelectedIndex = 0;
-            cbEnd.Items = this.stations;
+            cbEnd.ItemsSource = this._stations;
             cbEnd.SelectedIndex = 0;
             btOk.Click += (o, args) => this.OnClose( true );
             btCancel.Click += (o, args) => this.OnClose( false );
@@ -41,34 +41,36 @@ namespace DemoAvalonia.UI {
         
         public int NumChildren {
             get {
-                var edNumChildren = this.FindControl<NumericUpDown>( "EdNumChildren" );
-                return (int) edNumChildren.Value;
+                var edNumChildren = this.GetControl<NumericUpDown>( "EdNumChildren" );
+                int? toret = (int?) edNumChildren.Value;
+                
+                return toret ?? 0;
             }
         }
 
         public Station Start {
             get {
-                var cbStart = this.FindControl<ComboBox>( "CbStart" );
-                return this.stations[ cbStart.SelectedIndex ];
+                var cbStart = this.GetControl<ComboBox>( "CbStart" );
+                return this._stations[ cbStart.SelectedIndex ];
             }
         }
         
         public Station End {
             get {
-                var cbEnd = this.FindControl<ComboBox>( "CbEnd" );
-                return this.stations[ cbEnd.SelectedIndex ];
+                var cbEnd = this.GetControl<ComboBox>( "CbEnd" );
+                return this._stations[ cbEnd.SelectedIndex ];
             }
         }
 
         public string Kind {
             get {
-                var cbKind = this.FindControl<ComboBox>( "CbKind" );
-                return ( (ComboBoxItem?) cbKind?.SelectedItem )?.Content.ToString() ??
+                var cbKind = this.GetControl<ComboBox>( "CbKind" );
+                return ( (ComboBoxItem?) cbKind?.SelectedItem )?.Content?.ToString() ??
                     "Nothing";
             }
         }
 
-        public bool Accept => this.accept;
+        public bool Accept => this._accept;
 
         void InitializeComponent()
         {
@@ -77,11 +79,11 @@ namespace DemoAvalonia.UI {
 
         void OnClose(bool accept)
         {
-            this.accept = accept;
+            this._accept = accept;
             this.Close();
         }
 
-        ObservableCollection<Station> stations;
-        bool accept;
+        private ObservableCollection<Station> _stations;
+        private bool _accept;
     }
 }

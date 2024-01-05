@@ -1,4 +1,4 @@
-// DemoAvalonia (c) 2021 Baltasar MIT License <jbgarcia@uvigo.es>
+// DemoAvalonia (c) 2021/23 Baltasar MIT License <jbgarcia@uvigo.es>
 
 
 namespace DemoAvalonia.UI {
@@ -17,8 +17,8 @@ namespace DemoAvalonia.UI {
 #if DEBUG
             this.AttachDevTools();
 #endif
-            var txtAbout = this.FindControl<TextBlock>( "TxtAbout" );
-            var btOk = this.FindControl<Button>( "BtOk" );
+            var txtAbout = this.GetControl<TextBlock>( "TxtAbout" );
+            var btOk = this.GetControl<Button>( "BtOk" );
             
             txtAbout.Text = AppInfo.Name + " v" + AppInfo.Version
                             + "\n" + AppInfo.Email;

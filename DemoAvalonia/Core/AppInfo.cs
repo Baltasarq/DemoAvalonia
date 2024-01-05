@@ -1,4 +1,4 @@
-// DemoAvalonia (c) 2021 Baltasar MIT License <jbgarcia@uvigo.es>
+// DemoAvalonia (c) 2021/23 Baltasar MIT License <jbgarcia@uvigo.es>
 
 
 namespace DemoAvalonia.Core {

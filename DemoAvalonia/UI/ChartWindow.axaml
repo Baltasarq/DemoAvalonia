@@ -32,7 +32,11 @@
                                         Margin="5"
                                         Orientation="Horizontal">
                                         <Label Margin="5" Content="Thickness" />
-                                        <NumericUpDown Name="EdThickness" Value="1" Minimum="1" Maximum="3" />
+                                        <NumericUpDown Name="EdThickness"
+                                                       Value="1"
+                                                       Increment="1"
+                                                       Minimum="1"
+                                                       Maximum="3" />
                                 </StackPanel>
                         </StackPanel>
                         
@@ -48,6 +52,7 @@
                 
                 <ui:Chart
                         Name="ChGrf"
+                        Margin="5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch" />
         </DockPanel>

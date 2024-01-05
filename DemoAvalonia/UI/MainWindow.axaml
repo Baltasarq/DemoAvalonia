@@ -24,8 +24,8 @@
                 <MenuItem Header="_About" Name="OpAbout" />
             </MenuItem>
         </Menu>
-        <DockPanel DockPanel.Dock="Left">
-            <TreeView Name="tvOptions" />
+        <DockPanel DockPanel.Dock="Left" MinWidth="200">
+            <TreeView Name="TvOptions" />
         </DockPanel>
         <StackPanel Margin="5">
             <Button Name="BtFirst"

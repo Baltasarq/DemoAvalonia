@@ -9,7 +9,7 @@ public class MessageBox: Window
 {
     public MessageBox()
     {
-        this.lblMessage = new Label {
+        this._lblMessage = new Label {
             HorizontalAlignment = HorizontalAlignment.Left,
             Margin = new Thickness( 5 )
         };
@@ -29,19 +29,17 @@ public class MessageBox: Window
 
         btOk.Click += (_, _) => this.Close();
 
-        pnlMain.Children.AddRange( new Control[]{ lblMessage, btOk } );
+        pnlMain.Children.AddRange( new Control[]{ _lblMessage, btOk } );
         this.Content = pnlMain;
     }
 
     public string Message {
-        get {
-            return (string) this.lblMessage.Content;
-        }
+        get => ( (string?) this._lblMessage.Content ) ?? "";
         set {
-            this.lblMessage.Content = value;
+            this._lblMessage.Content = value;
             this.SizeToContent = SizeToContent.WidthAndHeight;
         }
     }
 
-    Label lblMessage;
+    private readonly Label _lblMessage;
 }

@@ -44,7 +44,12 @@
         
         <DockPanel Margin="5">
             <Label Content="Children (less than three years old)" DockPanel.Dock="Left" />
-            <NumericUpDown Margin="5" Name="EdNumChildren" Value="0" Minimum="0" Maximum="10"/>
+            <NumericUpDown Margin="5"
+                           Name="EdNumChildren"
+                           Value="0"
+                           Increment="1"
+                           Minimum="0"
+                           Maximum="10"/>
         </DockPanel>
         
         <DockPanel
